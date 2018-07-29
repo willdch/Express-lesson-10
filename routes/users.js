@@ -92,7 +92,7 @@ router.get('/profile/:id', auth.verifyUser, (req, res, next) => {
       .findAll({
         where: {
           [Op.and]: {
-            Deleted: null,
+            Deleted: false,
             UserId: req.user.UserId
           }
         },
@@ -103,7 +103,7 @@ router.get('/profile/:id', auth.verifyUser, (req, res, next) => {
         let display;
         if (req.user.Admin) {
           status = 'Admin';
-          display = 'Go to admin page';
+          res.render('Admin')
         } else {
           status = 'Normal user';
         }
@@ -152,11 +152,14 @@ router.get('/posts/:id', function(req, res, next) {
     .then(post => {
       res.render('posts', {
         PostTitle: post.PostTitle,
-        PostBody: post.PostBody
+        PostBody: post.PostBody,
+        PostId: post.PostId,
+        UserId: post.UserId
       });
     });
 });
 
+//delete posts from Posts.hbs
 router.delete('/posts/:id/delete', (req, res) => {
   let postId = parseInt(req.params.id);
   models.posts
@@ -171,8 +174,31 @@ router.delete('/posts/:id/delete', (req, res) => {
       }
     )
     .then(post => {
-      res.redirect('/users/profile/{{req.post.UserId}}');
+      res.send();
     });
 });
+
+router.put('/posts/:id', (req, res) => {
+  let postId = parseInt(req.params.id);
+  models.posts
+    .update(
+      {
+        PostTitle: req.body.postTitle,
+        PostBody: req.body.postBody
+      },
+      {
+        where: {
+          PostId: postId
+        }
+      }
+    )
+    .then(post => {
+      res.send();
+    });
+});
+
+// this is as far as i can get.  everything i do from this point just breaks stuff.
+
+
 
 module.exports = router;

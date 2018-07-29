@@ -12,7 +12,10 @@ module.exports = (sequelize, DataTypes) => {
     UserId: DataTypes.INTEGER,
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
-    Deleted: DataTypes.BOOLEAN
+    Deleted: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    }
   },
    {
     
