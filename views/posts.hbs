@@ -1,0 +1,44 @@
+<h1>Posts:</h1>
+<h3>Title: {{PostTitle}}</h3>
+<p>{{PostBody}}</p>
+
+<script>
+    function onSubmit() {
+
+        const title = document.getElementById('title').value;
+        const yearReleased = document.getElementById('yearReleased').value;
+
+        $.ajax({
+            url: '/albums/{{ AlbumId }}',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({ title: title, yearReleased: yearReleased }),
+            method: 'PUT', complete: () => window.location.reload()
+        })
+    }
+
+    function onDelete() {
+        $.ajax({
+            url: '/albums/{{AlbumId}}/delete',
+            method: 'DELETE', complete: () => window.location = "/albums"
+        })
+    }
+</script>
+
+<form onsubmit="onSubmit(); return false">
+    <div>
+        <label for="name">Title: </label>
+        <input type="text" name="postTitle" id="postTitle" value="{{PostTitle}}">
+    </div>
+    <div>
+        <label for="name">Body: </label>
+        <input type="text" name="postBody" id="postBody" value="{{PostBody}}">
+    </div>
+    <div>
+        <button type="submit" id="submitButton">Update Post</button>
+    </div>
+</form>
+
+
+<div>
+    <button onclick="onDelete()" id="deleteButton">Delete Post</button>
+</div>

@@ -84,11 +84,9 @@ router.post('/login', function(req, res, next) {
     });
 });
 
-
-
 router.get('/profile/:id', auth.verifyUser, (req, res, next) => {
   if (req.params.id !== String(req.user.UserId)) {
-    res.send('This is not your profile')
+    res.send('This is not your profile');
   } else {
     models.posts
       .findAll({
@@ -121,7 +119,7 @@ router.get('/profile/:id', auth.verifyUser, (req, res, next) => {
         });
       });
   }
- });
+});
 
 router.get('/logout', function(req, res) {
   res.cookie('jwt', null);
@@ -138,10 +136,43 @@ router.post('/profile/:id', (req, res) => {
         PostBody: req.body.body
       }
     })
-.then(post => {
-  res.redirect(req.originalUrl);
-} )
+    .then(post => {
+      res.redirect(req.originalUrl);
+    });
+});
 
+router.get('/posts/:id', function(req, res, next) {
+  let postId = parseInt(req.params.id);
+  models.posts
+    .find({
+      where: {
+        PostId: postId
+      }
+    })
+    .then(post => {
+      res.render('posts', {
+        PostTitle: post.PostTitle,
+        PostBody: post.PostBody
+      });
+    });
+});
+
+router.delete('/posts/:id/delete', (req, res) => {
+  let postId = parseInt(req.params.id);
+  models.posts
+    .update(
+      {
+        Deleted: 'true'
+      },
+      {
+        where: {
+          PostId: postId
+        }
+      }
+    )
+    .then(post => {
+      res.redirect('/users/profile/{{req.post.UserId}}');
+    });
 });
 
 module.exports = router;
