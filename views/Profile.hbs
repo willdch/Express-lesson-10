@@ -1,0 +1,47 @@
+<h1>{{Status}}</h1>
+<h1>Hello {{FirstName}} {{LastName}}</h1>
+<h2>Email: {{Email}}</h2>
+<h3>Username: {{Username}}</h3>
+<a href="/users/logout">logout</a>
+
+
+
+<div>
+    <h1>What's on your mind {{FirstName}} {{LastName}}?</h1>
+    <form id="postForm" name="mypost" method="POST" action="/users/profile/{{UserId}}">
+        <div>
+            <label for="name">UserId: </label>
+            <input type="text" name="UserId" value='{{UserId}}' readonly="readonly">
+        </div>
+
+        <div>
+            <label for="name">Title: </label>
+            <input type="text" name="title">
+        </div>
+        <div>
+            <label for="name">Body: </label>
+            <textarea type="text" name="body"></textarea>
+        </div>
+
+
+        <div>
+            <button type="submit">Post it!</button>
+        </div>
+    </form>
+</div>
+
+
+<div id='updatebtn'>
+    <button type="upDate">Update</button>
+</div>
+
+<div id='deletebtn'>
+    <button type="delete">Delete</button>
+</div>
+
+<h1>Posts:</h1>
+{{#each posts}}
+   <a href="/users/posts/{{PostId}}"><h2>{{PostTitle}}</h2></a>
+   <p>{{PostBody}}</p>
+{{/each}}
+
